@@ -1,5 +1,6 @@
 import React from 'react';
 import CardEvent from './CardEvent';
+import SettingWeekly from './SettingWeekly';
 const Home = () => {
   return (
     <div>
@@ -8,7 +9,9 @@ const Home = () => {
         {/* Aquí colocaremos el componente de Calendario */}
       </div>
       <div >
-        <CardEvent/>
+        {/* <CardEvent/> */}
+
+        <SettingWeekly/>
       </div>
     </div>
   );
