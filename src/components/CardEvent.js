@@ -9,11 +9,9 @@ import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { red } from '@mui/material/colors';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-
+import Button from '@mui/material/Button';
+import CreateIcon from '@mui/icons-material/Create';
+import SettingsIcon from '@mui/icons-material/Settings';
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -42,17 +40,11 @@ export default function CardEvent() {
         }
         action={
           <IconButton aria-label="settings">
-            <MoreVertIcon />
+            <SettingsIcon/>
           </IconButton>
         }
         title="Shrimp and Chorizo Paella"
         subheader="September 14, 2016"
-      />
-      <CardMedia
-        component="img"
-        height="194"
-        image="/static/images/cards/paella.jpg"
-        alt="Paella dish"
       />
       <CardContent>
         <Typography variant="body2" color="text.secondary">
@@ -63,19 +55,9 @@ export default function CardEvent() {
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+          <CreateIcon />
         </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-        <ExpandMore
-          expand={expanded}
-          onClick={handleExpandClick}
-          aria-expanded={expanded}
-          aria-label="show more"
-        >
-          <ExpandMoreIcon />
-        </ExpandMore>
+        <Button size="small">Copiar enlace</Button>
       </CardActions>
     </Card>
   );
