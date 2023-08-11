@@ -1,17 +1,16 @@
+import { Box } from '@mui/material';
 import React from 'react';
-
+import { Outlet } from 'react-router-dom';
+import AppBar from './AppBar';
 const Navbar = () => {
   return (
-    <div>
-      <h1>Welcome to Your Calendar</h1>
-      <button>Create New Appointment</button>
+
+    <Box sx={{display:'flex', flexDirection:'column', flex:1}} >
+      <AppBar/>
       <div>
-        {/* Aquí colocaremos el componente de Calendario */}
+        <Outlet/>
       </div>
-      <div>
-        {/* Aquí colocaremos el componente de Lista de Citas */}
-      </div>
-    </div>
+    </Box>
   );
 }
 
