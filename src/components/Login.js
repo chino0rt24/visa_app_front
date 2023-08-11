@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GoogleLogin } from 'react-google-login';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -15,10 +15,11 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
+    // Lógica de inicio de sesión con correo y contraseña
   };
 
   const handleGoogleLoginSuccess = (response) => {
-
+    // Lógica para manejar el inicio de sesión exitoso con Google
   };
 
   const handleGoogleLoginFailure = (error) => {
@@ -84,8 +85,7 @@ const Login = () => {
           buttonText="Login con Google"
           onSuccess={handleGoogleLoginSuccess}
           onFailure={handleGoogleLoginFailure}
-          redirectUri="http://localhost:3000" // Asegúrate de que coincida
-          cookiePolicy={'single_host_origin'}
+          redirectUri="http://localhost:3000"
         />
       </form>
     </div>
