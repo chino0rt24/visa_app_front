@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { GoogleLogin } from 'react-google-login';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -12,11 +13,16 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    // Aquí puedes realizar la lógica de inicio de sesión con el correo electrónico y la contraseña ingresados.
-    console.log('Email:', email);
-    console.log('Password:', password);
+  };
+
+  const handleGoogleLoginSuccess = (response) => {
+
+  };
+
+  const handleGoogleLoginFailure = (error) => {
+    console.error('Google Login Error:', error);
   };
 
   const containerStyle = {
@@ -54,7 +60,7 @@ const Login = () => {
 
   return (
     <div style={containerStyle}>
-      <form style={formStyle} onSubmit={handleSubmit}>
+      <form style={formStyle} onSubmit={handleLogin}>
         <h2>Login</h2>
         <input
           style={inputStyle}
@@ -73,6 +79,13 @@ const Login = () => {
           required
         />
         <button style={buttonStyle} type="submit">Login</button>
+        <GoogleLogin
+          clientId="867952354032-do43ibra0nof9bjr9jjfg71pl2gv0fum.apps.googleusercontent.com"
+          buttonText="Login con Google"
+          onSuccess={handleGoogleLoginSuccess}
+          onFailure={handleGoogleLoginFailure}
+          cookiePolicy={'single_host_origin'}
+        />
       </form>
     </div>
   );
