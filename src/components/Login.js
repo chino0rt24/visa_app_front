@@ -84,6 +84,7 @@ const Login = () => {
           buttonText="Login con Google"
           onSuccess={handleGoogleLoginSuccess}
           onFailure={handleGoogleLoginFailure}
+          redirectUri="http://localhost:3000" // Asegúrate de que coincida
           cookiePolicy={'single_host_origin'}
         />
       </form>
