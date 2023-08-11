@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Home = () => {
+const SettingWeekly = () => {
   return (
     <div>
       <h1>Welcome to Your Calendar</h1>
@@ -15,4 +15,4 @@ const Home = () => {
   );
 }
 
-export default Home;
+export default SettingWeekly;
