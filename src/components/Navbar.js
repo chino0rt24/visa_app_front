@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
 
     <Box sx={{display:'flex', flexDirection:'column', flex:1}} >
-      <AppBar/>
+      {/* <AppBar/> */}
       <div>
         <Outlet/>
       </div>
