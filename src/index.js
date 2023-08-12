@@ -9,11 +9,14 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import {  ThemeProvider } from '@mui/material/styles';
 import {theme} from './assets/theme';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}><App /></ThemeProvider>
+        <GoogleOAuthProvider clientId={"867952354032-do43ibra0nof9bjr9jjfg71pl2gv0fum.apps.googleusercontent.com"}>
+        <ThemeProvider theme={theme}><App /></ThemeProvider>
+        </GoogleOAuthProvider>
   </React.StrictMode>
 );
 

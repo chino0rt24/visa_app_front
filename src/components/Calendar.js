@@ -5,6 +5,7 @@ import { Typography } from '@mui/material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 
 function Calendar() {
   const totalColumns = 7;
@@ -44,6 +45,19 @@ function Calendar() {
             </Paper>
           </Grid>
         ))}
+        <Grid 
+          container xs={8} 
+          mx={"auto"} marginTop={'30px'} 
+          display={"flex"} justifyContent={"center"} 
+          flexDirection={'row'} >
+            <Button
+            fullWidth
+            variant="contained"
+            sx={{ borderRadius: 5 }}
+          >
+            Crear nuevo evento
+          </Button>
+        </Grid>
       </Grid>
     </div>
   );

@@ -23,7 +23,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-export default function CardEvent() {
+export default function CardEvent({eventDecription}) {
   const [expanded, setExpanded] = React.useState(false);
 
   const handleExpandClick = () => {
@@ -31,33 +31,26 @@ export default function CardEvent() {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345, backgroundColor:'transparent', boxShadow:'none', color:'white' }}>
       <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
         action={
-          <IconButton aria-label="settings">
-            <SettingsIcon/>
+          <IconButton color='white'  aria-label="settings">
+            <SettingsIcon sx={{color:'white'}}/>
           </IconButton>
         }
         title="Shrimp and Chorizo Paella"
         subheader="September 14, 2016"
       />
       <CardContent>
-        <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the mussels,
-          if you like.
+        <Typography  variant="body2" color="text.secondary">
+            {eventDecription}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <CreateIcon />
+        <IconButton  aria-label="add to favorites">
+          <CreateIcon sx={{color:'white'}} />
         </IconButton>
-        <Button size="small">Copiar enlace</Button>
+        <Button   sx={{color:'white'}} size="small">Copiar enlace</Button>
       </CardActions>
     </Card>
   );

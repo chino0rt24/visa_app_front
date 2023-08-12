@@ -1,4 +1,4 @@
-import * as React from 'react';
+import  React,{useEffect, useState} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,13 +12,19 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-
+import  Divider  from '@mui/material/Divider';
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const AppBarComponent = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    setUser(user);
+  }, []);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -36,28 +42,21 @@ const AppBarComponent = () => {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+    <AppBar position="static" >
+      <Container maxWidth="xl" sx={{bgcolor:'white'}} >
+        <Toolbar disableGutters sx={{width:'90%', mx:'auto'}} >
+          <img src={require('../assets/images/hours.png')} width={60} height={60} />
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="/"
+            color={'primary.main'}
             sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              ml: 2
             }}
           >
-            LOGO
+            CalenBot
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -114,7 +113,7 @@ const AppBarComponent = () => {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {/* {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
@@ -122,13 +121,36 @@ const AppBarComponent = () => {
               >
                 {page}
               </Button>
-            ))}
+            ))} */}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
+            
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                color={'secondary.main'}
+                sx={{
+                  ml: 2
+                }}
+              >
+                Hola
+                <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                color={'black'}
+                sx={{
+                  ml: 2
+                }}
+              >
+                {user?.name}
+              </Typography>
+              </Typography> 
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 2 }}>
+                <Avatar src={user?.picture} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -155,6 +177,7 @@ const AppBarComponent = () => {
             </Menu>
           </Box>
         </Toolbar>
+        <Divider light />
       </Container>
     </AppBar>
   );
