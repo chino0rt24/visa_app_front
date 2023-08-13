@@ -15,11 +15,15 @@ import  { useState, useEffect } from 'react';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
-
+import axios from 'axios';
+import { weekNumberOfDate } from '../utils/functions';
 
 const SettingWeekly = () => {
   const [showGreeting, setShowGreeting] = useState(false);
   const [text, setText] = useState('');
+  const [startHour, setStartHour] = useState('08:00');
+  const [endHour, setEndHour] = useState('18:00');
+  const [daysAvailable, setDaysAvailable] = useState([false, false, false, false, false, false, false]);
 
   useEffect(() => {
     // Establecer un temporizador para ocultar el saludo después de 3 segundos
@@ -35,48 +39,89 @@ const SettingWeekly = () => {
       clearTimeout(timer);
     };
   }, []);
+
+  const sendDataToServer = async () => {
+    let data = formatProps();
+      try {
+          const response = await axios.post('http://127.0.0.1:8000/schedule', data);
+          return response.data;
+      } catch (error) {
+          console.error("Hubo un error al enviar los datos:", error);
+          return null;
+      }
+  };
+
   const daysWeek = [ 
-    { day: 'Lunes' },
-    { day: 'Martes' },
-    { day: 'Miercoles' }, 
-    { day: 'Jueves' }, 
-    { day: 'Viernes' }, 
-    { day: 'Sabado' }, 
-    { day: 'Domingo' } 
+    { dia: 'Lunes', day:'monday' },
+    { dia: 'Martes', day:'tuesday' },
+    { dia: 'Miercoles', day:'wednesday' }, 
+    { dia: 'Jueves', day:'thursday' }, 
+    { dia: 'Viernes', day:'Friday' }, 
+    { dia: 'Sabado', day:'saturday' }, 
+    { dia: 'Domingo', day:'sunday' }, 
   ] 
-
-const CheckGroupDays = () => {
-  return (
-    <Grid container direction="row" 
-      sx={{borderColor: 'grey.300', borderRadius:1 }}
-      border={2} 
-      mx={'auto'}
-      >
-    {daysWeek.map((item, index) => (
-      <Grid item 
-        flex={1}
-        display={'flex'}
-        direction={'row'}
-        justifyContent={'center'}
-        alignItems='center'
-        sx={{ borderRight: index !== 6 ? 2 : 0, 
-           borderColor: 'grey.300' }}
+  const formatProps = () => {
+    const daysHours = daysAvailable.map((day, index) => {
+      let data = {
+        available: day,
+        startHour: day ? startHour : '',
+        endHour: day ? endHour : '',
+      }
+      return data
+    })
+    const days = {
+      monday: daysHours[0],
+      tuesday: daysHours[1],
+      wednesday: daysHours[2],
+      thursday: daysHours[3],
+      friday: daysHours[4],
+      saturday: daysHours[5],
+      sunday: daysHours[6],
+    }
+   const dataSetting = {
+     week: weekNumberOfDate(new Date().toISOString()),
+     year: new Date().getFullYear(),
+     days
+   }
+   return dataSetting
+  }
+  const CheckGroupDays = () => {
+    return (
+      <Grid container direction="row" 
+        sx={{borderColor: 'grey.300', borderRadius:1 }}
+        border={2} 
+        mx={'auto'}
         >
-      <FormControl >
-          <FormControlLabel
-          value="bottom"
-          control={<Checkbox />}
-          label={item.day}
-          labelPlacement="bottom"
-        />
-          </FormControl>
-       </Grid>
-    ))}
-    </Grid>
+      {daysWeek.map((item, index) => (
+        <Grid  
+          flex={1}
+          display={'flex'}
+          direction={'row'}
+          justifyContent={'center'}
+          alignItems='center'
+          sx={{ borderRight: index !== 6 ? 2 : 0, 
+            borderColor: 'grey.300' }}
+          >
+        <FormControl >
+            <FormControlLabel
+            value="bottom"
+            control={<Checkbox checked={daysAvailable[index]} onChange={
+              (value) => {
+                let newDays = daysAvailable;
+                newDays[index] = value.target.checked;
+                setDaysAvailable([...newDays]);
+            }} />}
+            label={item.dia}
+            labelPlacement="bottom"
+          />
+            </FormControl>
+        </Grid>
+      ))}
+      </Grid>
 
-  )
-}
-
+    )
+  }
+  
   return (
     <Box  bgcolor={'#f6f6f6'} sx={{  width: '100%', height: '100vh' }} display={'flex'}
     flexDirection={'row'} alignItems={'center'} justifyContent={'center'}
@@ -125,9 +170,10 @@ const CheckGroupDays = () => {
                       fullWidth
                       labelId="label-desde"
                       id="select-desde"
+                      value={startHour}
                       label="Desde"
                       placeholder={'08:00'}
-                      onChange={()=>{}}
+                      onChange={(item)=>{ setStartHour(item.target.value)}}
                     >
                   {hoursArray.map((item, index) => (
                     <MenuItem value={item.hour}>{item.hour}</MenuItem>
@@ -143,7 +189,8 @@ const CheckGroupDays = () => {
                       labelId="label-hasta"
                       id="select-hasta"
                       label="Hasta"
-                      onChange={()=>{}}
+                      value={endHour}
+                      onChange={(item)=>{ setEndHour(item.target.value)}}
                     >
                   {hoursArray.map((item, index) => (
                     <MenuItem value={item.hour}>{item.hour}</MenuItem>
@@ -168,7 +215,9 @@ const CheckGroupDays = () => {
           <Grid container justifyContent="flex-end" padding={2}>
             <Button 
             endIcon={< TaskAltIcon />}
-            variant="contained" color="primary" sx={{borderRadius: '25px'}}>
+            variant="contained" 
+            onClick={sendDataToServer}
+            color="primary" sx={{borderRadius: '25px'}}>
               Finalizar
             </Button>
           </Grid>

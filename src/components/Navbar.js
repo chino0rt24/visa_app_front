@@ -8,10 +8,9 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
-
+import { useNavigate } from 'react-router-dom';
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -40,9 +39,16 @@ function a11yProps(index) {
   };
 }
 const Navbar = () => {
+  const navigate = useNavigate();
   const [value, setValue] = React.useState(0);
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    switch(newValue) {
+      case 0: navigate('/home'); break;
+      case 1: navigate('/settings'); break;
+      case 2: navigate('/chatbot'); break;
+
+    }
   };
   return (
 

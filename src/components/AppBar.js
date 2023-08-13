@@ -126,33 +126,30 @@ const AppBarComponent = () => {
 
           <Box sx={{ flexGrow: 0 }}>
             
-            <Tooltip title="Open settings">
-                <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                color={'secondary.main'}
-                sx={{
-                  ml: 2
-                }}
-              >
-                Hola
-                <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                color={'black'}
-                sx={{
-                  ml: 2
-                }}
-              >
-                {user?.name}
-              </Typography>
-              </Typography> 
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 2 }}>
-                <Avatar src={user?.picture} />
-              </IconButton>
-            </Tooltip>
+          <Tooltip title="Open settings">
+          <Box sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+        <Typography
+            variant="h6"
+            noWrap
+            color={'secondary.main'}
+            sx={{ ml: 2 }}
+        >
+            Hola
+        </Typography>
+        <Typography
+            variant="h6"
+            noWrap
+            color={'black'}
+            sx={{ ml: 2 }}
+        >
+            {user?.name}
+        </Typography>
+        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0, ml: 2 }}>
+            <Avatar src={user?.picture} />
+        </IconButton>
+    </Box>
+          </Tooltip>
+
             <Menu
               sx={{ mt: '45px' }}
               id="menu-appbar"

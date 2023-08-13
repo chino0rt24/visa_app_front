@@ -13,14 +13,11 @@ import {
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CircularProgress from '@mui/material/CircularProgress'; // Importa el spinner
 import { useHistory } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import GoogleCalendarComponent from './AuthCalendar';
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigate = useNavigate();
-
-
   const [isLoading, setIsLoading] = useState(false); // Nuevo estado para el spinner
 
 
@@ -31,13 +28,7 @@ const Login = () => {
   const handleGoogleLoginSuccess = (response) => {
     setIsLoading(false); // Ocultar el spinner en caso de éxito
     const decodedToken = jwtDecode(response.credential);
-    const user = {
-      name: decodedToken.name,
-      email: decodedToken.email,
-      picture: decodedToken.picture,
-    };
-    localStorage.setItem('user', JSON.stringify(user));
-    navigate('/settingWeekly');  
+    console.log(decodedToken);
     
   };
 
@@ -136,22 +127,23 @@ const Login = () => {
       {isLoading ? (
         <CircularProgress /> // Mostrar spinner si isLoading es verdadero
       ) : (
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={
-            <GoogleLogin
-              clientId="867952354032-do43ibra0nof9bjr9jjfg71pl2gv0fum.apps.googleusercontent.com"
-              buttonText="Login con Google"
-              onSuccess={handleGoogleLoginSuccess}
-              onFailure={handleGoogleLoginFailure}
-              redirectUri="http://localhost:3000"
-              onClick={handleGoogleLoginClick} // Llamada al método que muestra el spinner
-            />
-          }
-        >
-          Iniciar con Google
-        </Button>
+        <GoogleCalendarComponent />
+        // <Button
+        //   fullWidth
+        //   variant="outlined"
+        //   startIcon={
+        //     <GoogleLogin
+        //       clientId="867952354032-do43ibra0nof9bjr9jjfg71pl2gv0fum.apps.googleusercontent.com"
+        //       buttonText="Login con Google"
+        //       onSuccess={handleGoogleLoginSuccess}
+        //       onFailure={handleGoogleLoginFailure}
+        //       redirectUri="http://localhost:3000"
+        //       onClick={handleGoogleLoginClick} // Llamada al método que muestra el spinner
+        //     />
+        //   }
+        // >
+        //   Iniciar con Google
+        // </Button>
       )}
     </Grid>
       </Grid>
