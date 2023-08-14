@@ -82,6 +82,7 @@ function GoogleCalendarComponent() {
             email,
             picture,
           } = response.result;
+          console.log(response);
           localStorage.setItem('user', JSON.stringify({name, email, picture}));
           navigate('/settingWeekly');  
     } catch (error) {
@@ -126,19 +127,37 @@ function GoogleCalendarComponent() {
 
   const listUpcomingEvents = async () => {
     let response;
+    const date = new Date();
+    date.setHours(22, 0, 0, 0);
+
+    const endDate = new Date(date); // Crear una nueva instancia basada en startDate
+    endDate.setMinutes(date.getMinutes() + 30); // Sumar 30 minutos
+    console.log("Creating calendar event");
     try {
       const request = {
-        calendarId: 'primary',
-        timeMin: (new Date()).toISOString(),
-        showDeleted: false,
-        singleEvents: true,
-        maxResults: 10,
-        orderBy: 'startTime',
-      };
-      response = await gapi.client.calendar.events.list(request);
-      const eventsList = response.result.items.map(event => `${event.summary} (${event.start.dateTime || event.start.date})`);
-      setEvents(eventsList);
+        'summary': "Nuevo meet",
+        'description': "PRUEBAAAAAA",
+        'calendarId': 'primary',
+        'start': {
+          'dateTime': date.toISOString(),
+          'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+        },
+        'end': {
+          'dateTime': endDate.toISOString(), // Usar endDate para la hora de finalización
+          'timeZone': Intl.DateTimeFormat().resolvedOptions().timeZone
+        },
+        'conferenceData': {
+          'conferenceId': Math.random().toString(16),
+          'createRequest': {
+            'requestId': Math.random().toString(16) // Se sugiere usar un identificador aleatorio único para evitar conflictos de solicitud.
+          }
+        },
+        'conferenceDataVersion': 1
+      }
+      response = await gapi.client.calendar.events.insert(request);
+      console.log(response);
     } catch (err) {
+      console.log(err);
       setEvents([err.message]);
     }
   };

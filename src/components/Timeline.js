@@ -9,16 +9,12 @@ import SchoolIcon from '@mui/icons-material/School'; // Suponiendo que usas el Ã
 import SettingsIcon from '@mui/icons-material/Settings';
 import EditIcon from '@mui/icons-material/Edit';
 import { Button, IconButton } from '@mui/material';
-import EventModal from './Modal';
 import {Typography} from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 
 
 function Timeline() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [value, onChange] = useState(new Date());
-
   const events = [
     {
       date: '09:30',
@@ -83,14 +79,13 @@ function Timeline() {
       icon={event.icon}
       date={<span style={{ marginLeft: '20px', marginRight: '20px' }}>{event.date}</span>}
     >
-      <EventModal open={isModalOpen} handleClose={() => setIsModalOpen(false)} />
       <Typography component={'p'} fontWeight={'medium'} >{event.description}</Typography>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         {/* <h3 className="vertical-timeline-element-title"  >{event.title}</h3> */}
         <Typography component={'p'} fontWeight={'medium'} >{event.title}</Typography>
 
-        <IconButton onClick={() => setIsModalOpen(true)}  >
+        <IconButton onClick={() => {}}  >
           <EditIcon />
         </IconButton>
       </div>

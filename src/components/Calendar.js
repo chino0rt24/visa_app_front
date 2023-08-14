@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
@@ -6,14 +6,17 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
+import EventModal from './Modal';
 
 function Calendar() {
   const totalColumns = 7;
   const totalRows = 6;
   const daysOfWeek = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];  // Iniciales de los días de la semana en español
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [value, onChange] = useState(new Date());
   return (
     <div style={{ margin: "30px" }}>
+        <EventModal open={isModalOpen} handleClose={() => setIsModalOpen(false)} />
       {/* Nuevo div antes del Grid container */}
       <div style={{ display: 'flex', marginBottom: '20px' }}>
         <div style={{ flex: '4',  display:'flex',marginLeft:10,  alignItems: 'center' }}>
@@ -52,6 +55,7 @@ function Calendar() {
           flexDirection={'row'} >
             <Button
             fullWidth
+            onClick={() => setIsModalOpen(true)}
             variant="contained"
             sx={{ borderRadius: 5 }}
           >

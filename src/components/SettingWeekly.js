@@ -15,41 +15,60 @@ import  { useState, useEffect } from 'react';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import TaskAltIcon from '@mui/icons-material/TaskAlt';
-import axios from 'axios';
 import { weekNumberOfDate } from '../utils/functions';
+import { useDispatch, useSelector } from 'react-redux';
+import LoadingButton from '@mui/lab/LoadingButton';
+import * as Actions from '../redux/actions';
+import Toast from './Toast';
 
 const SettingWeekly = () => {
-  const [showGreeting, setShowGreeting] = useState(false);
+  const [showGreeting, setShowGreeting] = useState(true);
   const [text, setText] = useState('');
   const [startHour, setStartHour] = useState('08:00');
   const [endHour, setEndHour] = useState('18:00');
   const [daysAvailable, setDaysAvailable] = useState([false, false, false, false, false, false, false]);
+  const dispatch = useDispatch();
+  const [toastInfo, setToastInfo] = useState({text: '', type: '', visible: false});
+  const loading = useSelector((state) => state.WeeklyHours.spinner_configurate_weekly);
+  const success_setting = useSelector((state) => state.WeeklyHours.data_configurate_weekly);
 
   useEffect(() => {
-    // Establecer un temporizador para ocultar el saludo después de 3 segundos
     const user =  JSON.parse(localStorage.getItem('user'));
     setText(user.name);
     setShowGreeting(true);
-    const timer = setTimeout(() => {
-      setShowGreeting(false);
-    }, 3000);
-
-    // Limpieza al desmontar el componente
-    return () => {
-      clearTimeout(timer);
-    };
   }, []);
 
   const sendDataToServer = async () => {
     let data = formatProps();
-      try {
-          const response = await axios.post('http://127.0.0.1:8000/schedule', data);
-          return response.data;
-      } catch (error) {
-          console.error("Hubo un error al enviar los datos:", error);
-          return null;
-      }
+    dispatch(Actions.ConfigurateWeeklyAction(data));
   };
+
+  useEffect(() => {
+    console.log(success_setting);
+    if(success_setting?.message){
+      console.log("lanzando success_setting" , success_setting);
+
+      setToastInfo({
+        text: 'Configuración guardada con éxito!🎉',
+        type: 'success',
+        visible: true
+      })
+
+      setTimeout(() => {
+        setToastInfo({
+          text: '',
+          type: '',
+          visible: false
+        });
+        dispatch(Actions.ConfigurateWeeklyAction('PURGE'));
+      }, 3000)
+    }
+  },[loading])
+
+  useEffect(() => {
+
+    console.log("lanzando toastInfo" , toastInfo);
+  },[toastInfo] )
 
   const daysWeek = [ 
     { dia: 'Lunes', day:'monday' },
@@ -60,6 +79,7 @@ const SettingWeekly = () => {
     { dia: 'Sabado', day:'saturday' }, 
     { dia: 'Domingo', day:'sunday' }, 
   ] 
+
   const formatProps = () => {
     const daysHours = daysAvailable.map((day, index) => {
       let data = {
@@ -123,27 +143,25 @@ const SettingWeekly = () => {
   }
   
   return (
-    <Box  bgcolor={'#f6f6f6'} sx={{  width: '100%', height: '100vh' }} display={'flex'}
-    flexDirection={'row'} alignItems={'center'} justifyContent={'center'}
-    >
-
-{showGreeting ? (
-        <Fade in={showGreeting} timeout={500}>
-        <Typography variant="h4" align="center" style={{ color: 'white', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
-            ¡Hola {text}!   
-            </Typography>
-        </Fade>
-      ) : (
-        <Fade in={!showGreeting} timeout={100}>
-          <Card  sx={{ display: 'flex',flexDirection: 'column', width: '50%', mx: 'auto' }} >
-        
+    <Box  
+      bgcolor={'#f6f6f6'} 
+      sx={{  width: '100%', height: '100vh' }} 
+      display={'flex'}
+      flexDirection={'row'} justifyContent={'center'}
+      alignItems={'flex-start'}
+    >    
+    <Card  sx={{ display: 'flex',
+      flexDirection: 'column', borderRadius: 3, 
+      marginTop:2,
+      width: '50%', mx: 'auto' }} >
+    <Toast text={toastInfo?.text} type={toastInfo?.type} visible={toastInfo?.visible} />    
         <Grid container 
           style={{ 
             border: "1px solid grey.300", 
           }}
         >
           <Grid item container xs={12} style={{ padding: 16 }}>
-            <Grid item xs={8} marginTop={3} >
+            <Grid item xs={8} marginTop={1} >
               <Typography variant="h5" fontWeight="medium" component="h2">
                 ¡Configura tu horario!
               </Typography>
@@ -213,18 +231,19 @@ const SettingWeekly = () => {
           </Typography>
           </Grid>
           <Grid container justifyContent="flex-end" padding={2}>
-            <Button 
-            endIcon={< TaskAltIcon />}
-            variant="contained" 
-            onClick={sendDataToServer}
-            color="primary" sx={{borderRadius: '25px'}}>
-              Finalizar
-            </Button>
+          <LoadingButton
+          size="small"
+          endIcon={< TaskAltIcon />}
+          onClick={sendDataToServer}
+          loading={loading}
+          variant="contained"
+          color="primary"
+        >
+          Finalizar
+        </LoadingButton>
           </Grid>
         </Grid>
         </Card>
-        </Fade>
-      )}
       </Box>
   
   );
