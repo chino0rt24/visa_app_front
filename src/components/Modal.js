@@ -57,14 +57,6 @@ const EventModal = ({ open, handleClose }) => {
         console.log('Error al crear el evento:', error.message);
       }
 
-      // try {
-      //   const response = await createEvent(myEvent);
-      //   console.log('Evento creado:', response);
-      // } catch (error) {
-      //   console.error('Error al crear el evento:', error.message);
-      // }
-      // console.log("data", data);
-
     }
     function createCalendarEvent(summary, description,startDate, endDate) {
       return new Promise((resolve, reject) => {
