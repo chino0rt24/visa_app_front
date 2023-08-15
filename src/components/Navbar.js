@@ -59,7 +59,7 @@ const Navbar = () => {
         <Tabs value={value} onChange={handleChange} mx={'auto'} sx={{width:'90%', mx:'auto'}} aria-label="basic tabs example">
           <Tab label="Mi calendario" {...a11yProps(0)} />
           <Tab label="Ajustes" {...a11yProps(1)} />
-          <Tab label="Item Three" {...a11yProps(2)} />
+          <Tab label="Chatbot" {...a11yProps(2)} />
         </Tabs>
         </Toolbar>
         </Container>    

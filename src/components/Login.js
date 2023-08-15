@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import CircularProgress from '@mui/material/CircularProgress'; // Importa el spinner
-import { useHistory } from 'react-router-dom';
+import { useHistory, useNavigate } from 'react-router-dom';
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
 import GoogleCalendarComponent from './AuthCalendar';
 const Login = () => {
@@ -21,6 +21,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false); // Nuevo estado para el spinner
   const session = useSession(); // tokens, when session exists we have a user
   const supabase = useSupabaseClient(); // talk to supabase!
+  const navigate = useNavigate()
 
 
   async function googleSignIn() {
@@ -30,10 +31,7 @@ const Login = () => {
         scopes: 'https://www.googleapis.com/auth/calendar.events',
         
       },
-
     });
-
-
     if(error) {
       alert("Error logging in to Google provider with Supabase");
       console.log(error);
@@ -131,10 +129,9 @@ const Login = () => {
         <CircularProgress /> // Mostrar spinner si isLoading es verdadero
       ) : (
 
-        // <Button  onClick={googleSignIn} variant="contained" >
-        //   Iniciar
-        // </Button>
-        <GoogleCalendarComponent/>
+        <Button  onClick={googleSignIn} variant="outlined" >
+          Iniciar sesión con google
+        </Button>
       )}
     </Grid>
       </Grid>

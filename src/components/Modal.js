@@ -11,7 +11,7 @@ import { add30Minutes, weekNumberOfDate, obtainYearStringYYYYMMDD, getStartAndEn
 import useForm from '../hooks/useForm';
 import { createEvent } from '../events/events';
 import { useSession, useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
-
+import { LoadingButton } from '@mui/lab';
 const EventModal = ({ open, handleClose }) => {
     const [selectedDay, setSelectedDay] = useState('monday');  // Estado para el día seleccionado
     const dispatch = useDispatch();
@@ -21,10 +21,25 @@ const EventModal = ({ open, handleClose }) => {
     const [endHour, setEndHour] = useState('');
     const [dateCalendar, setDateCalendar] = useState({});
     const [rangeSession, setRangeSession] = useState('');
+    const loading = useSelector(store => store.Event.spinner_create);
     const session = useSession(); // tokens, when session exists we have a user
     const handleDayChange = (event) => {
       setSelectedDay(event.target.value);
     }
+
+    function convertirDiaInglesAEspanol(diaIngles) {
+      const dias = {
+          "Monday": "Lunes",
+          "Tuesday": "Martes",
+          "Wednesday": "Miércoles",
+          "Thursday": "Jueves",
+          "Friday": "Viernes",
+          "Saturday": "Sábado",
+          "Sunday": "Domingo"
+      };
+  
+      return dias[diaIngles] || "Día no válido";
+  }
 
     const handleHourChange = (event) => {
       setStartHour(event.target.value);
@@ -43,11 +58,8 @@ const EventModal = ({ open, handleClose }) => {
 
 
     const handleSave = async () => {
-      
-
       try {
         const hangoutLink = await createCalendarEvent(form.name, form.description, dateCalendar?.startDate, dateCalendar?.endDate);
-        console.log('Evento creado:', hangoutLink);
        const week = weekNumberOfDate(new Date())
         dispatch(Actions.CreateEventAction({...form, startHour, endHour, hangoutLink,
           week, year: obtainYearStringYYYYMMDD(new Date())
@@ -60,7 +72,7 @@ const EventModal = ({ open, handleClose }) => {
     }
     function createCalendarEvent(summary, description,startDate, endDate) {
       return new Promise((resolve, reject) => {
-
+      alert(session?.provider_token)
       const baseUrl = "https://www.googleapis.com/calendar/v3/calendars/primary/events";
       const url = new URL(baseUrl);
 
@@ -211,7 +223,7 @@ const EventModal = ({ open, handleClose }) => {
             <Select labelId="day-label" value={selectedDay} onChange={handleDayChange}>
               {Object.keys(availability).map(day => (
                 <MenuItem key={day} value={day}>
-                  {day.charAt(0).toUpperCase() + day.slice(1)}
+                  {convertirDiaInglesAEspanol(day.charAt(0).toUpperCase() + day.slice(1))}
                 </MenuItem>
               ))}
             </Select>
@@ -234,9 +246,15 @@ const EventModal = ({ open, handleClose }) => {
                     </Grid>
                 </Grid>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button 
-                    onClick={handleSave}
-                    variant="contained" sx={{ borderRadius: 5 }}>Guardar</Button>
+                <LoadingButton
+                  size="small"
+                  onClick={handleSave}
+                  loading={loading}
+                  variant="contained"
+                  color="primary"
+                  >
+                  Guardar
+                </LoadingButton>
                 </Box>
             </Box>
         </Modal>

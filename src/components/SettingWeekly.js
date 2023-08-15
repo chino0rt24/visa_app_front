@@ -65,11 +65,6 @@ const SettingWeekly = () => {
     }
   },[loading])
 
-  useEffect(() => {
-
-    console.log("lanzando toastInfo" , toastInfo);
-  },[toastInfo] )
-
   const daysWeek = [ 
     { dia: 'Lunes', day:'monday' },
     { dia: 'Martes', day:'tuesday' },

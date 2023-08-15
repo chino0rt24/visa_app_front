@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import { Typography } from '@mui/material';
@@ -7,16 +7,45 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import EventModal from './Modal';
-
+import Toast from './Toast';
+import * as Actions from '../redux/actions';
+import { useSelector, useDispatch } from 'react-redux';
 function Calendar() {
   const totalColumns = 7;
   const totalRows = 6;
   const daysOfWeek = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];  // Iniciales de los días de la semana en español
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const dispatch = useDispatch();
   const [value, onChange] = useState(new Date());
-  return (
+  const [toastInfo, setToastInfo] = useState({text: '', type: '', visible: false});
+  const loading = useSelector(store => store.Event.spinner_create);
+  const success_create_event = useSelector(store => store.Event.spinner_create);
+  
+    useEffect(() => {
+      console.log("success_create_event", success_create_event);
+      if(success_create_event){
+        setIsModalOpen(false);
+        setToastInfo({
+          text: 'Evento creado con éxito!🎉. Enviamos a tu contacto los datos de la cita',
+          type: 'success',
+          visible: true
+        })
+        setTimeout(() => {
+          setToastInfo({
+            text: '',
+            type: '',
+            visible: false
+          });
+          dispatch(Actions.CreateEventAction('PURGE'));
+        }, 3000)
+      }
+    },[loading])
+
+    return (
     <div style={{ margin: "30px" }}>
-        <EventModal open={isModalOpen} handleClose={() => setIsModalOpen(false)} />
+      <Toast text={toastInfo?.text} type={toastInfo?.type} visible={toastInfo?.visible}  />
+        <EventModal open={isModalOpen} handleClose={() => {
+          setIsModalOpen(false)} }/>
       {/* Nuevo div antes del Grid container */}
       <div style={{ display: 'flex', marginBottom: '20px' }}>
         <div style={{ flex: '4',  display:'flex',marginLeft:10,  alignItems: 'center' }}>
