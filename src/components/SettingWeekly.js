@@ -34,7 +34,7 @@ const SettingWeekly = () => {
 
   useEffect(() => {
     const user =  JSON.parse(localStorage.getItem('user'));
-    setText(user.name);
+    setText(user?.name);
     setShowGreeting(true);
   }, []);
 

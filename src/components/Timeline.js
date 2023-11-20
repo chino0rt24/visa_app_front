@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import  * as Actions from '../redux/actions';
 import { weekNumberOfDate } from '../utils/functions';
 import Toast from './Toast';
-
+import {Box} from '@mui/material';
 function Timeline() {
   const dispatch = useDispatch();
   const events = useSelector(store => store.Event.events);
@@ -104,40 +104,55 @@ function Timeline() {
   },[events]);
 
   return (
-    <VerticalTimeline>
-      <Toast text={toastInfo?.text} type={toastInfo?.type} visible={toastInfo?.visible}  />
-
-      {events?.map((event, index) => (
-      <VerticalTimelineElement
-      key={index}
-      className={event.className}
-      contentStyle={{ background: 'white' }}
-      contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
-      iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
-      icon={ <WorkIcon />}
-      date={<span style={{ marginLeft: '20px', marginRight: '20px' }}>{event.date}</span>}
-    >
-      <Typography component={'p'} fontWeight={'medium'} >{event.type}</Typography>
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        {/* <h3 className="vertical-timeline-element-title"  >{event.title}</h3> */}
-        <Typography component={'p'} fontWeight={'medium'} >{event.title}</Typography>
-
-        <IconButton onClick={() => {}}  >
-          <EditIcon />
-        </IconButton>
-      </div>
-      <h4 className="vertical-timeline-element-subtitle">{event.subtitle}</h4>
-      <Typography >{event.description}</Typography>
-      <Button onClick={() => handleCopyClick(event.hangoutLink)} sx={{fontSize: '12px'}} >
-        <ContentCopyIcon sx={{fontSize: '18px'}} ></ContentCopyIcon>Copiar enlace
-      </Button>
-    </VerticalTimelineElement>
+    < Box class={'d-flex flex-column justify-content-center align-items-center col-12 bg-primary '} >
+       {events?.length > 0 ?
+      <VerticalTimeline>
+          <Toast text={toastInfo?.text} type={toastInfo?.type} visible={toastInfo?.visible}  />       
+          {events?.map((event, index) => (
+          <VerticalTimelineElement
+          key={index}
+          className={event.className}
+          contentStyle={{ background: 'white' }}
+          contentArrowStyle={{ borderRight: '7px solid  rgb(33, 150, 243)' }}
+          iconStyle={{ background: 'rgb(33, 150, 243)', color: '#fff' }}
+          icon={ <WorkIcon />}
+          date={<span style={{ marginLeft: '20px', marginRight: '20px' }}>{event.date}</span>}
+        >
+          <Typography component={'p'} fontWeight={'medium'} >{event.type}</Typography>
     
-      ))}
-    </VerticalTimeline>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            {/* <h3 className="vertical-timeline-element-title"  >{event.title}</h3> */}
+            <Typography component={'p'} fontWeight={'medium'} >{event.title}</Typography>
+    
+            <IconButton onClick={() => {}}  >
+              <EditIcon />
+            </IconButton>
+          </div>
+          <h4 className="vertical-timeline-element-subtitle">{event.subtitle}</h4>
+          <Typography >{event.description}</Typography>
+          <Button onClick={() => handleCopyClick(event.hangoutLink)} sx={{fontSize: '12px'}} >
+            <ContentCopyIcon sx={{fontSize: '18px'}} ></ContentCopyIcon>Copiar enlace
+          </Button>
+        </VerticalTimelineElement>
+        
+          ))}
+        </VerticalTimeline>
+      :
+        <Box style={{
+          alignSelf: 'center',
+          display: 'flex',
+          height: '600px',
+          alignItems: 'center',
+          justifyContent: 'flex-end',
+        }} >
+      <img style={{
+        alignSelf: 'center',
+      }} src={require("../assets/images/vacio.png")} alt="empty" width={300} height={300} />
+        </Box>
+
+      } 
+    </Box>
   );
 }
 
 export default Timeline;
-
